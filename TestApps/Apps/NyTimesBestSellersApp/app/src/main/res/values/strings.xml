@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">NyBestSellerBooksApp</string>
+    <string name="title_bscategoryitem_detail">BSCategoryItem Detail</string>
+    <string name="title_activity_main">Best Seller</string>
+    <string name="title_activity_bslist_books">BSListBooksActivity</string>
+    <string name="title_activity_bsbook_detail">BSBookDetailActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name ="search_hint">Search By Author</string>
+    <string name="search_title">Search By Title</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

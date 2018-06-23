@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="project.com.nybestsellerbooksapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity
+            android:name=".svc.activity.MainActivity"
+            android:label="@string/title_activity_main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            
+        </activity>
+        <activity
+            android:name=".svc.activity.BSListBooksActivity"
+            android:label="@string/title_activity_bslist_books"
+           />
+        <activity
+            android:name=".svc.activity.BSBookDetailActivity"
+            android:label="@string/title_activity_bsbook_detail"></activity>
+    </application>
+
+</manifest>
