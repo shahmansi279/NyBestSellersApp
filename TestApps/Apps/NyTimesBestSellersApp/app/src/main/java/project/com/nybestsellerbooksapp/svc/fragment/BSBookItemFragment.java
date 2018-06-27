@@ -36,12 +36,15 @@ public class BSBookItemFragment extends Fragment {
     private int mColumnCount = 1;
     private String mBookListName = null;
     private OnListFragmentInteractionListener mListener;
-
+    private RecyclerView recyclerView = null;
+    private MyBSBookItemRecyclerViewAdapter bookItemAdapter = null;
+    private List<BSBookList.BSBookItem> bsBookItems = null;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public BSBookItemFragment() {
+
     }
 
     // TODO: Customize parameter initialization
@@ -74,7 +77,7 @@ public class BSBookItemFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            final RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -92,9 +95,10 @@ public class BSBookItemFragment extends Fragment {
             call.enqueue(new Callback<BSBookList>() {
                 @Override
                 public void onResponse(Call<BSBookList> call, Response<BSBookList> response) {
-                    List<BSBookList.BSBookItem> bsBookItems = response.body().getResults();
-                    recyclerView.setAdapter(new MyBSBookItemRecyclerViewAdapter(bsBookItems , mListener));
-                 //   Log.d("Mansi", "Number of bs lists received: " + bsBookItems);
+
+                        bsBookItems = response.body().getResults();
+                        bookItemAdapter = new MyBSBookItemRecyclerViewAdapter(bsBookItems , mListener);
+                        recyclerView.setAdapter(bookItemAdapter);
                 }
 
 
@@ -127,6 +131,17 @@ public class BSBookItemFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
+        bsBookItems.clear();
+        recyclerView.setAdapter(null);
+        bookItemAdapter.clear();
+        recyclerView.clearOnScrollListeners();
+
     }
 
     /**

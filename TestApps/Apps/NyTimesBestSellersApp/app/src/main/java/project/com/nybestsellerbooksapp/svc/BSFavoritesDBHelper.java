@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.LinkedList;
 import java.util.List;
 
-import project.com.nybestsellerbooksapp.svc.model.BSBookList;
 import project.com.nybestsellerbooksapp.svc.model.BSFavoriteBookItem;
 import project.com.nybestsellerbooksapp.svc.model.BSFavoritesContract;
 
@@ -74,17 +73,18 @@ public class BSFavoritesDBHelper extends SQLiteOpenHelper {
         return favBooks;
     }
 
-    public void addFavoriteBook(BSBookList.BSBookItem favoriteBookItem){
+    public void addFavoriteBook(String mIsbn, String title){
 
          BSFavoriteBookItem bsFavoriteBookItem = new BSFavoriteBookItem();
-         bsFavoriteBookItem.setBookTitle(favoriteBookItem.getBookDetails().get(0).getTitle());
-         bsFavoriteBookItem.setBookReviewLink(favoriteBookItem.getAmazonProductUrl());
-         bsFavoriteBookItem.setBookIsbn(favoriteBookItem.getBookDetails().get(0).getPrimaryIsbn13());
+         bsFavoriteBookItem.setBookTitle(title);
+        // bsFavoriteBookItem.setBookReviewLink(favoriteBookItem.getAmazonProductUrl());
+         bsFavoriteBookItem.setBookIsbn(mIsbn);
 
          SQLiteDatabase db = this.getWritableDatabase();
          ContentValues values = new ContentValues();
          values.put(BSFavoritesContract.BSFavoriteBookEntry.COLUMN_NAME_FAV_TITLE, bsFavoriteBookItem.getBookTitle());
-         values.put(BSFavoritesContract.BSFavoriteBookEntry.COLUMN_NAME_FAV_LINK,  bsFavoriteBookItem.getBookReviewLink());
+         //TODO : Remove DB table
+         //values.put(BSFavoritesContract.BSFavoriteBookEntry.COLUMN_NAME_FAV_LINK,  bsFavoriteBookItem.getBookReviewLink());
          values.put(BSFavoritesContract.BSFavoriteBookEntry.COLUMN_NAME_FAV_ISBN,  bsFavoriteBookItem.getBookIsbn());
 
         // insert

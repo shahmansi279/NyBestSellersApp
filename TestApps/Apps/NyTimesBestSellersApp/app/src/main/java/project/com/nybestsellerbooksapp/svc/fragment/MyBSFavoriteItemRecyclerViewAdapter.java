@@ -60,6 +60,13 @@ public class MyBSFavoriteItemRecyclerViewAdapter extends RecyclerView.Adapter<My
         return mValues.size();
     }
 
+
+    public void clear()
+    {
+        mValues.clear();
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;

@@ -10,21 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import project.com.nybestsellerbooksapp.R;
-import project.com.nybestsellerbooksapp.svc.fragment.BSHistoryItemFragment.OnListFragmentInteractionListener;
 import project.com.nybestsellerbooksapp.svc.fragment.dummy.DummyContent.DummyItem;
 import project.com.nybestsellerbooksapp.svc.model.BSHistoryList;
+import project.com.nybestsellerbooksapp.svc.model.GBookDataItems;
+import project.com.nybestsellerbooksapp.svc.model.Item;
+import project.com.nybestsellerbooksapp.svc.rest.GBApiClient;
+import project.com.nybestsellerbooksapp.svc.rest.GBInterface;
+import project.com.nybestsellerbooksapp.svc.util.StringUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * specified {@link project.com.nybestsellerbooksapp.svc.fragment.BSHistoryItemFragment.OnHistoryListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyBSHistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<MyBSHistoryItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<BSHistoryList.BSHistoryBookItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final BSHistoryItemFragment.OnHistoryListFragmentInteractionListener mListener;
+    private List<Item> gbBookItems = null;
 
-    public MyBSHistoryItemRecyclerViewAdapter(OnListFragmentInteractionListener listener) {
+    public MyBSHistoryItemRecyclerViewAdapter(BSHistoryItemFragment.OnHistoryListFragmentInteractionListener listener) {
         mValues = new ArrayList<BSHistoryList.BSHistoryBookItem>(20);
         mListener = listener;
     }
@@ -39,8 +47,26 @@ public class MyBSHistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<MyB
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getAuthor());
-        holder.mContentView.setText(mValues.get(position).getReviews().get(0).getSundayReviewLink());
+
+        String title = mValues.get(position).getTitle();
+        holder.mIdView.setText(StringUtil.camelCase(title));
+        holder.mContentView.setText(mValues.get(position).getAuthor());
+
+
+        /*Get the history detail for a book to use on click of the item*/
+
+        boolean isDetailForBookAvailable = false;
+
+        String isbn = null;
+
+        if(mValues.get(position).getIsbns().size()>0){
+            isbn = mValues.get(position).getIsbns().get(0).getIsbn13();
+            isDetailForBookAvailable = true;
+        }
+
+
+        String finalIsbn = isbn;
+        boolean finalIsDetailForBookAvailable = isDetailForBookAvailable;
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +74,35 @@ public class MyBSHistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<MyB
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    if(finalIsDetailForBookAvailable){
+
+
+                        String query = "isbn=" + finalIsbn;
+                        GBInterface gbClient = GBApiClient.getClient().create(GBInterface.class);
+                        Call<GBookDataItems>  call = gbClient.getGBookIem("AIzaSyDv7UorHAegtFuyyCzQSicwf2gMgynxyFM",query);
+
+                        call.enqueue(new Callback<GBookDataItems>() {
+                            @Override
+                            public void onResponse(Call<GBookDataItems> call, Response<GBookDataItems> response) {
+
+                                gbBookItems = response.body().getItems();
+                                mListener.onHistoryListFragmentInteraction(gbBookItems);
+                            }
+
+
+                            @Override
+                            public void onFailure(Call<GBookDataItems> call, Throwable t) {
+                                t.printStackTrace();
+                                call.cancel();
+                            }
+
+                        });
+
+                    }
+                    else{
+                        mListener.onHistoryListFragmentInteraction(null);
+                    }
+
                 }
             }
         });

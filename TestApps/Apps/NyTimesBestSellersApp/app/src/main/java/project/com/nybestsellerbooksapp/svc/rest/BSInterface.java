@@ -18,6 +18,10 @@ public interface BSInterface {
     Call<BSBookList> getBSBookListItems(@Path("format") String format, @Query("api_key") String apiKey,
                                         @Query("list") String list) ;
 
+    //Trying to do history page
+    @GET("/svc/books/v3/lists.{format}")
+    Call<BSBookList> getBSBookItem(@Path("format") String format, @Query("api_key") String apiKey,
+                                        @Query("isbn") String isbn, @Query("rank") Integer rank, @Query("list") String listName, @Query("published_date") String publishedDate) ;
 
 
     @GET("/svc/books/v3/lists/best-sellers/history.json")

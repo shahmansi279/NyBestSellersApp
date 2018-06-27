@@ -10,7 +10,8 @@ import android.support.v7.widget.Toolbar;
 
 import project.com.nybestsellerbooksapp.R;
 import project.com.nybestsellerbooksapp.svc.fragment.BSBookDetailFragment;
-import project.com.nybestsellerbooksapp.svc.model.BSBookList;
+import project.com.nybestsellerbooksapp.svc.model.SaleInfo;
+import project.com.nybestsellerbooksapp.svc.model.VolumeInfo;
 
 public class BSBookDetailActivity extends AppCompatActivity
 implements BSBookDetailFragment.OnFragmentInteractionListener{
@@ -24,9 +25,10 @@ implements BSBookDetailFragment.OnFragmentInteractionListener{
 
 
         Intent i= getIntent();
-        BSBookList.BSBookItem bookItem = (BSBookList.BSBookItem) i.getParcelableExtra("bookItem");
+        VolumeInfo bookVolumeItem = (VolumeInfo) i.getParcelableExtra("bookVolumeItem");
+        SaleInfo bookSaleItem = (SaleInfo)i.getParcelableExtra("bookSaleItem");
 
-        BSBookDetailFragment ft =  BSBookDetailFragment.newInstance(bookItem);
+        BSBookDetailFragment ft =  BSBookDetailFragment.newInstance(bookVolumeItem, bookSaleItem);
         FragmentManager
                 fragmentManager=
                 getSupportFragmentManager();

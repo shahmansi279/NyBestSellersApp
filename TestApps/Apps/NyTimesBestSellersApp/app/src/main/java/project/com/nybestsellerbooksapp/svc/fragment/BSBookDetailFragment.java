@@ -3,18 +3,21 @@ package project.com.nybestsellerbooksapp.svc.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import project.com.nybestsellerbooksapp.R;
 import project.com.nybestsellerbooksapp.svc.BSFavoritesDBHelper;
-import project.com.nybestsellerbooksapp.svc.model.BSBookDetailItem;
-import project.com.nybestsellerbooksapp.svc.model.BSBookList;
+import project.com.nybestsellerbooksapp.svc.model.SaleInfo;
+import project.com.nybestsellerbooksapp.svc.model.VolumeInfo;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,30 +31,31 @@ public class BSBookDetailFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ITEM_TITLE = "title";
-    private static final String ARG_ITEM_REVIEW_LINK = "reviewLink";
-    private static final String ARG_ITEM_ISBN = "isbn";
-    private static final String ARG_ITEM_RANK = "rank";
-    private static final String ARG_ITEM_RLW = "rank_last_week";
     private static final String ARG_ITEM_AUTHOR = "author";
-    private static final String ARG_ITEM_CONTRIBUTOR = "contributor";
+    private static final String ARG_ITEM_ISBN = "isbn";
     private static final String ARG_ITEM_DESC = "description";
+    private static final String ARG_ITEM_PUBLISHER = "publisher";
+    private static final String ARG_ITEM_PRICE = "price";
+    private static final String ARG_ITEM_PAGES = "pages";
+    private static final String ARG_ITEMS_PREVIEW_LINK = "previewLink";
+    private static final String ARG_ITEMS_PUBLISHED_DATE = "publishedDate";
+    private static final String ARG_ITEMS_THUMBNAIL_IMAGE = "imageUrl";
 
-
-    private static final String ARG_ITEM_BOOK = "bookItem";
 
     // TODO: Rename and change types of parameters
     private String mTitle;
-    private String mReviewLink;
+    private String mPreviewLink;
+    private String mPublisher;
+    private String mPublishedDate;
+    private String mThumbnail;
     private String mDescription;
     private String mAuthor;
-    private String mContributor;
-    private String mRank;
-    private String mRankLastWeek;
+    private String mPrice;
+    private Integer mPages;
     private String mIsbn;
-
+    private boolean isDetailInfoAvailable = false;
 
     private BSFavoritesDBHelper mHelper;
-    private BSBookList.BSBookItem mBookItem;
 
     private OnFragmentInteractionListener mListener;
 
@@ -68,24 +72,50 @@ public class BSBookDetailFragment extends Fragment {
      * @return A new instance of fragment BSBookDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BSBookDetailFragment newInstance(BSBookList.BSBookItem
-                                                   item) {
+    public static BSBookDetailFragment newInstance(VolumeInfo
+                                                   volumeInfo, SaleInfo saleInfo) {
 
 
 
         BSBookDetailFragment fragment = new BSBookDetailFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_ITEM_TITLE, item.getBookDetails().get(0).getTitle());
-        args.putString(ARG_ITEM_REVIEW_LINK, item.getAmazonProductUrl());
-        args.putString(ARG_ITEM_ISBN,item.getBookDetails().get(0).getPrimaryIsbn13());
-        args.putString(ARG_ITEM_DESC,item.getBookDetails().get(0).getDescription());
-        args.putString(ARG_ITEM_AUTHOR,item.getBookDetails().get(0).getAuthor());
-        args.putString(ARG_ITEM_CONTRIBUTOR,item.getBookDetails().get(0).getContributor());
-        args.putString(ARG_ITEM_RANK, String.valueOf(item.getRank()));
-        args.putString(ARG_ITEM_RLW, String.valueOf(item.getRankLastWeek()));
 
-        args.putParcelable(ARG_ITEM_BOOK, item);
-        fragment.setArguments(args);
+        if(volumeInfo != null && saleInfo != null){
+
+          VolumeInfo bookVolume = volumeInfo;
+          SaleInfo bookSales = saleInfo;
+          args.putString(ARG_ITEM_ISBN,bookVolume.getIndustryIdentifiers().get(0).getIdentifier());
+          args.putString(ARG_ITEM_TITLE,bookVolume.getTitle());
+          //  args.putString(ARG_ITEM_REVIEW_LINK, item.);
+            args.putString(ARG_ITEM_DESC,bookVolume.getDescription());
+
+            //combine authors
+
+            StringBuilder authors =  new StringBuilder();
+            for(String author: bookVolume.getAuthors()){
+                authors.append(author);
+                authors.append(" & ");
+
+            }
+            authors.lastIndexOf("&");
+            int index = authors.lastIndexOf("&");
+            authors.replace(index, index, "");
+            args.putString(ARG_ITEM_AUTHOR,new String(authors).trim());
+            args.putString(ARG_ITEM_PUBLISHER,bookVolume.getPublisher());
+
+            if(bookSales.getRetailPrice() != null)
+                 args.putString(ARG_ITEM_PRICE, bookSales.getRetailPrice().getAmount() + " " + bookSales.getRetailPrice().getCurrencyCode() );
+            else
+                args.putString(ARG_ITEM_PRICE, "NOT FOR SALE");
+
+            args.putInt(ARG_ITEM_PAGES, bookVolume.getPageCount());
+            args.putString(ARG_ITEMS_PREVIEW_LINK, bookVolume.getPreviewLink());
+            args.putString(ARG_ITEMS_PUBLISHED_DATE, bookVolume.getPublishedDate());
+            args.putString(ARG_ITEMS_THUMBNAIL_IMAGE, bookVolume.getImageLinks().getThumbnail());
+            fragment.setArguments(args);
+        }
+
+
         return fragment;
     }
 
@@ -93,17 +123,21 @@ public class BSBookDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mTitle = getArguments().getString(ARG_ITEM_TITLE);
-            mReviewLink = getArguments().getString(ARG_ITEM_REVIEW_LINK);
-            mIsbn = getArguments().getString(ARG_ITEM_ISBN);
-            mAuthor = getArguments().getString(ARG_ITEM_AUTHOR);
-            mContributor = getArguments().getString(ARG_ITEM_CONTRIBUTOR);
-            mRank = getArguments().getString(ARG_ITEM_RANK);
-            mRankLastWeek = getArguments().getString(ARG_ITEM_RLW);
-            mBookItem = getArguments().getParcelable(ARG_ITEM_BOOK);
-            mDescription = getArguments().getParcelable(ARG_ITEM_DESC);
 
+            isDetailInfoAvailable = true;
+            mTitle = getArguments().getString(ARG_ITEM_TITLE);
+            mAuthor = getArguments().getString(ARG_ITEM_AUTHOR);
+            mPrice = getArguments().getString(ARG_ITEM_PRICE);
+            mDescription = getArguments().getString(ARG_ITEM_DESC);
+            mPages = getArguments().getInt(ARG_ITEM_PAGES);
+            mIsbn = getArguments().getString(ARG_ITEM_ISBN);
+            mPublisher = getArguments().getString(ARG_ITEM_PUBLISHER);
+            mPublishedDate = getArguments().getString(ARG_ITEMS_PUBLISHED_DATE);
+            mPreviewLink = getArguments().getString(ARG_ITEMS_PREVIEW_LINK);
+            mThumbnail = getArguments().getString(ARG_ITEMS_THUMBNAIL_IMAGE);
         }
+
+
     }
 
     @Override
@@ -112,20 +146,69 @@ public class BSBookDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bsbook_detail, container, false);
 
-        TextView titleView = (TextView)v.findViewById(R.id.title);
-        titleView.setText(mTitle);
+        TextView noDataView = (TextView)v.findViewById(R.id.noDataPlaceholder);
+        if(isDetailInfoAvailable){
 
-        TextView prodView = (TextView)v.findViewById(R.id.amazon_prod_url);
-        prodView.setText(mReviewLink);
 
-        TextView descView = (TextView)v.findViewById(R.id.description);
-        descView.setText(mDescription);
+            noDataView.setVisibility(View.GONE);
 
-        TextView authorView = (TextView)v.findViewById(R.id.author);
-        authorView.setText(mAuthor);
 
-        TextView isbnView = (TextView)v.findViewById(R.id.primary_isbn);
-        isbnView.setText(mIsbn);
+            TextView titleView = (TextView)v.findViewById(R.id.title);
+            titleView.setText(mTitle);
+
+
+            TextView prodView = (TextView)v.findViewById(R.id.google_preview_url);
+            prodView.setText(mPreviewLink);
+
+            TextView descView = (TextView)v.findViewById(R.id.description);
+            descView.setText(mDescription);
+
+            TextView authorView = (TextView)v.findViewById(R.id.author);
+            authorView.setText(mAuthor);
+
+            TextView isbnView = (TextView)v.findViewById(R.id.price);
+            isbnView.setText(mPrice);
+
+            ImageView imgView = (ImageView)v.findViewById(R.id.bookThumbnail);
+
+            Glide.with(getContext())
+                    .load(mThumbnail)
+                    .into(imgView);
+
+            final ImageButton favBtn = (ImageButton)v.findViewById(R.id.favButton);
+            mHelper = new BSFavoritesDBHelper(getContext());
+
+
+            boolean isFav = mHelper.isFavoriteBook(mIsbn);
+            if(mHelper.isFavoriteBook(mIsbn))
+                favBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_star_big_on));
+            else
+                favBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_star_big_off));
+
+            favBtn.setOnClickListener( new View.OnClickListener(){
+
+                public void onClick(View v){
+
+                    if(mHelper.isFavoriteBook(mIsbn)){
+
+                        mHelper.removeFavoriteBook(mIsbn);
+                        favBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_star_big_off));
+
+                    }else    {
+                        mHelper.addFavoriteBook(mIsbn, mTitle);
+                        favBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_star_big_on));
+                    }
+
+                }
+            });
+
+        }
+        else{
+            noDataView.setVisibility(View.VISIBLE);
+            LinearLayout layoutView = (LinearLayout) v.findViewById(R.id.detailitem);
+            layoutView.setVisibility(View.GONE);
+        }
+
 
       //  TextView rankView = (TextView)v.findViewById(R.id.rank);
        // rankView.setText(mRank);
@@ -133,32 +216,7 @@ public class BSBookDetailFragment extends Fragment {
        // TextView rankLastWeekView = (TextView)v.findViewById(R.id.rank_last_week);
        // rankLastWeekView.setText(mRank);
 
-        final ImageButton favBtn = (ImageButton)v.findViewById(R.id.favButton);
-        mHelper = new BSFavoritesDBHelper(getContext());
 
-
-        boolean isFav = mHelper.isFavoriteBook(mIsbn);
-        if(mHelper.isFavoriteBook(mIsbn))
-            favBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_star_big_on));
-        else
-            favBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_star_big_off));
-
-        favBtn.setOnClickListener( new View.OnClickListener(){
-
-            public void onClick(View v){
-
-                if(mHelper.isFavoriteBook(mIsbn)){
-
-                    mHelper.removeFavoriteBook(mIsbn);
-                    favBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_star_big_off));
-
-                }else    {
-                    mHelper.addFavoriteBook(mBookItem);
-                    favBtn.setImageDrawable(getResources().getDrawable(R.drawable.btn_star_big_on));
-                }
-
-            }
-        });
 
         return v;
     }

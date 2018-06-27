@@ -3,6 +3,7 @@ package project.com.nybestsellerbooksapp.svc.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -20,6 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 import project.com.nybestsellerbooksapp.R;
 import project.com.nybestsellerbooksapp.svc.PaginationScrollListener;
 import project.com.nybestsellerbooksapp.svc.model.BSHistoryList;
+import project.com.nybestsellerbooksapp.svc.model.Item;
 import project.com.nybestsellerbooksapp.svc.rest.BSApiClient;
 import project.com.nybestsellerbooksapp.svc.rest.BSInterface;
 import retrofit2.Call;
@@ -29,7 +31,7 @@ import retrofit2.Response;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnHistoryListFragmentInteractionListener}
  * interface.
  */
 public class BSHistoryItemFragment extends Fragment {
@@ -38,7 +40,7 @@ public class BSHistoryItemFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private OnHistoryListFragmentInteractionListener mListener;
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
     private BSInterface bsClient;
@@ -92,11 +94,13 @@ public class BSHistoryItemFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
 
-
-      //  ((MainActivity)  getActivity()).getSupportActionBar().setTitle("History");
-
         recyclerView =(RecyclerView) view.findViewById(R.id.list);
         searchView = (SearchView)view.findViewById(R.id.search);
+
+        DividerItemDecoration itemDecor = new DividerItemDecoration(getActivity().getApplicationContext(), DividerItemDecoration.VERTICAL);
+        itemDecor.setDrawable(getResources().getDrawable(R.drawable.divider));
+        recyclerView.addItemDecoration(itemDecor);
+
 
         //Fetch first 20 items.
         bsClient =  BSApiClient.getClient().create(BSInterface.class);
@@ -294,8 +298,8 @@ public class BSHistoryItemFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnHistoryListFragmentInteractionListener) {
+            mListener = (OnHistoryListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -318,8 +322,8 @@ public class BSHistoryItemFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnListFragmentInteractionListener {
+    public interface OnHistoryListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(BSHistoryList.BSHistoryBookItem item);
+        void onHistoryListFragmentInteraction(List<Item> bookDetailItemInfo);
     }
 }

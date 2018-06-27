@@ -2,6 +2,7 @@ package project.com.nybestsellerbooksapp.svc.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -9,16 +10,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 
+import java.util.List;
+
 import project.com.nybestsellerbooksapp.R;
 import project.com.nybestsellerbooksapp.svc.adapter.BSFragmentPagerAdapter;
 import project.com.nybestsellerbooksapp.svc.fragment.BSFavoriteItemFragment;
 import project.com.nybestsellerbooksapp.svc.fragment.BSHistoryItemFragment;
 import project.com.nybestsellerbooksapp.svc.fragment.BSListItemFragment;
 import project.com.nybestsellerbooksapp.svc.model.BSFavoriteBookItem;
-import project.com.nybestsellerbooksapp.svc.model.BSHistoryList;
 import project.com.nybestsellerbooksapp.svc.model.BSList;
+import project.com.nybestsellerbooksapp.svc.model.Item;
 
-public class MainActivity extends AppCompatActivity implements  BSListItemFragment.OnListFragmentInteractionListener , BSFavoriteItemFragment.OnListFragmentInteractionListener, BSHistoryItemFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements  BSListItemFragment.OnListFragmentInteractionListener , BSFavoriteItemFragment.OnListFragmentInteractionListener, BSHistoryItemFragment.OnHistoryListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,20 @@ public class MainActivity extends AppCompatActivity implements  BSListItemFragme
     }
 
     @Override
-    public void onListFragmentInteraction(BSHistoryList.BSHistoryBookItem item){
+    public void onHistoryListFragmentInteraction(List<Item> item){
+
+
+        if(item.get(0).getVolumeInfo() != null )
+
+        {
+            Parcelable volumeInfo = (Parcelable)item.get(0).getVolumeInfo();
+            Intent booksDetailIntent = new Intent(getApplicationContext(), BSBookDetailActivity.class);
+            booksDetailIntent.putExtra("bookVolumeItem", volumeInfo);
+            booksDetailIntent.putExtra("bookSaleItem",(Parcelable)item.get(0).getSaleInfo());
+            startActivity(booksDetailIntent);
+        }
+
+
 
     }
 

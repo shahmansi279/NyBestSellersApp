@@ -60,6 +60,13 @@ public class MyBSBookItemRecyclerViewAdapter extends RecyclerView.Adapter<MyBSBo
         return mValues.size();
     }
 
+    public void clear()
+    {
+        int size = mValues.size();
+        mValues.clear();
+        notifyItemRangeRemoved(0, size);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
