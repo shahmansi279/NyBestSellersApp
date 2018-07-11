@@ -6,174 +6,274 @@
     android:layout_height="match_parent"
     android:paddingTop="?android:attr/actionBarSize"
     android:visibility="visible"
-    tools:context="project.com.nybestsellerbooksapp.svc.fragment.BSBookDetailFragment"
-    tools:layout_editor_absoluteY="25dp">
+    tools:context="com.bestreads.fragment.BSBookDetailFragment"
+    tools:layout_editor_absoluteY="25dp"
+    android:background="@color/colorBackground">
 
-    <!-- TODO: Update blank fragment layout -->
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/detailitem"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteY="56dp">
+
 
         <TextView
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="48dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            android:typeface="sans"
-            app:layout_constraintBottom_toTopOf="@+id/bookThumbnail"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textSize="24sp"
+            android:fontFamily="@font/roboto_bold"
+            app:layout_constraintEnd_toStartOf="@+id/favButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageButton
+            android:id="@+id/favButton"
+            android:layout_width="57dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorBackground"
+            android:src="@drawable/unfav"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/bookThumbnail"
-            android:layout_width="186dp"
-            android:layout_height="167dp"
-            tools:layout_editor_absoluteX="9dp"
-            tools:layout_editor_absoluteY="79dp" />
+            android:id="@+id/bookThumbNail"
+            android:layout_width="188dp"
+            android:layout_height="250dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/image_border"
+            android:src="@android:drawable/picture_frame"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/publishedOn" />
+
+        <TextView
+            android:id="@+id/author_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/by"
+            android:textSize="18sp"
+            android:fontFamily="@font/roboto_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+        <TextView
+            android:id="@+id/price_currency"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/currency_code_usd"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/bookThumbNail"
+            app:layout_constraintTop_toBottomOf="@+id/publishedOn" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@style/normal_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bookThumbnail" />
-        "
-        app:layout_constraintEnd_toStartOf="@+id/favButton"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
-
-
-        <ImageButton
-            android:id="@+id/favButton"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:src="@android:drawable/btn_star_big_off"
-            app:layout_constraintBottom_toTopOf="@+id/bookThumbnail"
-            app:layout_constraintStart_toEndOf="@+id/title" />
+            app:layout_constraintTop_toBottomOf="@+id/bookThumbNail" />
 
         <TextView
-            android:id="@+id/google_preview_url"
+            android:id="@+id/publishedBy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorSecondary"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/author" />
-
-        <TextView
-            android:id="@+id/author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:background="@color/colorSecondary"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.208"
+            android:text="@string/published_by"
+            android:textAppearance="@style/normal_text"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
-
-        <TextView
-            android:id="@+id/isbn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@color/colorSecondary"
-            android:text="@string/hello_blank_fragment"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintTop_toBottomOf="@+id/pages"
-            tools:layout_editor_absoluteX="214dp" />
-
-        <TextView
-            android:id="@+id/pages"
-            android:layout_width="wrap_content"
-            android:layout_height="10dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/colorSecondary"
-            android:text="@string/hello_blank_fragment"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toTopOf="@+id/description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/price" />
+            app:layout_constraintTop_toBottomOf="@+id/author_lbl" />
 
         <TextView
             android:id="@+id/publisher"
-            android:layout_width="0dp"
-            android:layout_height="16dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
-            android:background="@color/colorSecondary"
-            android:text="@string/hello_blank_fragment"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintEnd_toStartOf="@+id/publishedDate"
-            app:layout_constraintTop_toTopOf="@+id/author" />
+            android:textAppearance="@style/normal_text"
+            app:layout_constraintStart_toEndOf="@+id/publishedBy"
+            app:layout_constraintTop_toBottomOf="@+id/author_lbl" />
+
+        <TextView
+            android:id="@+id/publishedOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/on"
+            android:textAppearance="@style/normal_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/publishedBy" />
+
+        <TextView
+            android:id="@+id/totalPages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/total_pages"
+            android:textAppearance="@style/normal_text"
+            app:layout_constraintStart_toEndOf="@+id/bookThumbNail"
+            app:layout_constraintTop_toBottomOf="@+id/price_currency" />
+
+        <TextView
+            android:id="@+id/pages"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/normal_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/totalPages"
+            app:layout_constraintTop_toBottomOf="@+id/price_currency" />
+
+        <TextView
+            android:id="@+id/isbn_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/isbn"
+            android:textAppearance="@style/normal_text"
+            app:layout_constraintStart_toEndOf="@+id/bookThumbNail"
+            app:layout_constraintTop_toBottomOf="@+id/totalPages" />
+
+        <TextView
+            android:id="@+id/google_preview_url"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/primaryColor"
+            android:textAppearance="@style/normal_text"
+            android:clickable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bookThumbNail"
+            app:layout_constraintTop_toBottomOf="@+id/average_rating" />
+
 
         <TextView
             android:id="@+id/publishedDate"
             android:layout_width="0dp"
-            android:layout_height="59dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:scrollbars="vertical"
+            android:textAppearance="@style/normal_text"
+            app:layout_constraintStart_toEndOf="@+id/publishedOn"
+            app:layout_constraintTop_toBottomOf="@+id/publishedBy" />
+
+
+        <TextView
+            android:id="@+id/isbn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="@color/colorSecondary"
-            android:text="@string/hello_blank_fragment"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintEnd_toStartOf="@+id/google_preview_url"
-            app:layout_constraintStart_toEndOf="@+id/publisher"
-            app:layout_constraintTop_toBottomOf="@+id/description" />
+            android:textAppearance="@style/normal_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/isbn_lbl"
+            app:layout_constraintTop_toBottomOf="@+id/totalPages" />
 
         <TextView
             android:id="@+id/price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/price_currency"
+            app:layout_constraintTop_toBottomOf="@+id/publishedOn" />
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="@color/colorSecondary"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.64"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/bookThumbnail"
+            android:textSize="18sp"
+            android:fontFamily="@font/roboto_medium"
+            app:layout_constraintStart_toEndOf="@+id/author_lbl"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
+        <TextView
+            android:id="@+id/average_rating_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/average_rating"
+            android:textAppearance="@style/normal_text"
+            app:layout_constraintStart_toEndOf="@+id/bookThumbNail"
+            app:layout_constraintTop_toBottomOf="@+id/isbn" />
+
+        <TextView
+            android:id="@+id/average_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/normal_text"
+            app:layout_constraintStart_toEndOf="@+id/average_rating_lbl"
+            app:layout_constraintTop_toBottomOf="@+id/isbn"
+           />
+
+        <ImageView
+            android:id="@+id/rating_img"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/rating"
+            app:layout_constraintStart_toEndOf="@+id/average_rating"
+            app:layout_constraintTop_toBottomOf="@+id/isbn" />
+
+
     </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <TextView
-        android:id="@+id/noDataPlaceholder"
-        android:layout_width="0dp"
+        android:id="@+id/no_data_placeholder"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:paddingLeft="15dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
         android:text="@string/no_data_available"
         android:textSize="20sp"
-        android:typeface="sans"
-        android:visibility="gone"
-        tools:layout_editor_absoluteY="623dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
 
 </android.support.constraint.ConstraintLayout>

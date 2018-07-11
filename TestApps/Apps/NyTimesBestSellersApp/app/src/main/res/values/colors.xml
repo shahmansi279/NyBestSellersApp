@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#DD0074</color>
-    <color name="colorPrimaryDark">#ef4fa6</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorSecondary">#fff5f5f5</color>
-    <color name="grey">#D3D3D3</color>
+    <color name="primaryColor">#ff4081</color>
+    <color name="primaryLightColor">#ff79b0</color>
+    <color name="primaryDarkColor">#c60055</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <!-- For divider dection white-->
+    <color name="colorSection">#FFFFFF</color>
+    <color name="onSectionPrimaryText">#000011</color>
+    <color name="onSectionSecondaryText">#D3D3D3</color>
+    <color name="colorBackground">#FFFFFF</color>
 </resources>
+
+
+

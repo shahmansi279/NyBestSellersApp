@@ -1,13 +1,23 @@
 <resources>
-    <string name="app_name">NyBestSellerBooksApp</string>
+    <string name="app_name">Best Reads</string>
     <string name="title_bscategoryitem_detail">BSCategoryItem Detail</string>
-    <string name="title_activity_main">Best Seller</string>
+    <string name="title_activity_main">New York Times Best Selling Lists</string>
+    <string name="title_launcher">Best Reads</string>
     <string name="title_activity_bslist_books">BSListBooksActivity</string>
     <string name="title_activity_bsbook_detail">BSBookDetailActivity</string>
     <string name="action_settings">Settings</string>
     <string name ="search_hint">Search By Author</string>
     <string name="search_title">Search By Title</string>
-    <string name="no_data_available">Sorry we could not fetch the item, since no detailed information available in our collection</string>
+    <string name="no_data_available">Sorry we could not fetch the item , since no detailed information is available in our collection</string>
+    <string name="published_by">Published By</string>
+    <string name="on">Published Date</string>
+    <string name="isbn">ISBN</string>
+    <string name="total_pages">Total Pages</string>
+    <string name="currency_code_usd">$</string>
+    <string name="by">By</string>
+    <string name="google_preview">Google Preview</string>
+    <string name="average_rating">Rating</string>
+    <string name="search">Search By Title or Author</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

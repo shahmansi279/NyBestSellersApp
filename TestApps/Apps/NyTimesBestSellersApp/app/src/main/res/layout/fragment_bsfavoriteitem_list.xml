@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
-    android:name="project.com.nybestsellerbooksapp.svc.fragment.BSFavoriteItemFragment"
+    android:tag="@+id/favorites"
+    android:name="com.nybestsellerbooksapp.svc.fragment.BSFavoriteItemFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="project.com.nybestsellerbooksapp.svc.fragment.BSFavoriteItemFragment"
+    tools:context="com.bestreads.fragment.BSFavoriteItemFragment"
     tools:listitem="@layout/fragment_bsfavoriteitem"
-    android:paddingTop="?android:attr/actionBarSize"/>
+   />
