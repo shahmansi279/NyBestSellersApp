@@ -12,7 +12,7 @@ import com.bestreads.R;
  */
 public class SplashActivity extends AppCompatActivity {
 
-    private static final int SPLASH_DISPLAY_TIME = 5000;
+    private static final int SPLASH_DISPLAY_TIME = 3000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

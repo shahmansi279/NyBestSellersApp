@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
-
 import com.bestreads.R;
 import com.bestreads.fragment.BSBookItemFragment.OnListFragmentInteractionListener;
 import com.bestreads.fragment.dummy.DummyContent.DummyItem;
@@ -17,6 +15,9 @@ import com.bestreads.model.Item;
 import com.bestreads.rest.GBApiClient;
 import com.bestreads.rest.GBInterface;
 import com.bestreads.util.StringUtil;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,8 +50,9 @@ public class MyBSBookItemRecyclerViewAdapter extends RecyclerView.Adapter<MyBSBo
 
         holder.mItem = mValues.get(position);
         String title = mValues.get(position).getBookDetails().get(0).getTitle();
+        String author = (mValues.get(position).getBookDetails().get(0).getAuthor());
         holder.mIdView.setText(StringUtil.camelCase(title).trim());
-        holder.mContentView.setText(mValues.get(position).getBookDetails().get(0).getAuthor());
+        holder.mContentView.setText(author);
 
         boolean isDetailForBookAvailable = false;
 
@@ -70,7 +72,8 @@ public class MyBSBookItemRecyclerViewAdapter extends RecyclerView.Adapter<MyBSBo
             public void onClick(View v) {
                 if (finalIsDetailForBookAvailable) {
 
-                    String query = "isbn=" + finalIsbn;
+                  //  String query = "title=" + finalIsbn;
+                    String query = title + " "  + author + " " + finalIsbn;
                     GBInterface gbClient = GBApiClient.getClient().create(GBInterface.class);
                     Call<GBookDataItems> call = gbClient.getGBookIem(GBApiClient.getGAPIIdentifier(), query);
 

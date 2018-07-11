@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.List;
-
 import com.bestreads.R;
 import com.bestreads.fragment.BSFavoriteItemFragment.OnListFragmentInteractionListener;
 import com.bestreads.fragment.dummy.DummyContent.DummyItem;
@@ -17,6 +15,9 @@ import com.bestreads.model.Item;
 import com.bestreads.rest.GBApiClient;
 import com.bestreads.rest.GBInterface;
 import com.bestreads.util.StringUtil;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,8 +49,9 @@ public class MyBSFavoriteItemRecyclerViewAdapter extends RecyclerView.Adapter<My
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         String title = mValues.get(position).getBookTitle();
+        String author = mValues.get(position).getBookAuthor();
         holder.mIdView.setText(StringUtil.camelCase(title));
-        holder.mContentView.setText(mValues.get(position).getBookAuthor());
+        holder.mContentView.setText(author);
 
         boolean isDetailForBookAvailable = false;
 
@@ -71,7 +73,8 @@ public class MyBSFavoriteItemRecyclerViewAdapter extends RecyclerView.Adapter<My
 
                     if(finalIsDetailForBookAvailable){
 
-                        String query = "isbn=" + finalIsbn;
+                       // + finalIsbn + " "
+                        String query = title + " "  + author + " " + finalIsbn;
                         GBInterface gbClient = GBApiClient.getClient().create(GBInterface.class);
                         Call<GBookDataItems> call = gbClient.getGBookIem(GBApiClient.getGAPIIdentifier(),query);
 
