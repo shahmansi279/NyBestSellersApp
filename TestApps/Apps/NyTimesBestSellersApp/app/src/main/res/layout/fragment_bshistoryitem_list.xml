@@ -25,6 +25,27 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/search"
         app:layoutManager="LinearLayoutManager"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        android:nestedScrollingEnabled="false"
         tools:context="com.bestreads.fragment.BSHistoryItemFragment"
-         />
+         >
+
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/no_search_results"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="normal"
+        android:textSize="18sp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/no_search_results"
+        android:visibility="gone"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_centerInParent="true"/>
+        />
+
 </RelativeLayout>

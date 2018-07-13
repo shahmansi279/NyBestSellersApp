@@ -7,6 +7,6 @@
     android:name="com.bestreads.fragment.BSBookItemFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutManager="LinearLayoutManager"
+    android:nestedScrollingEnabled="false"
     tools:context="com.bestreads.fragment.BSBookItemFragment"
     tools:listitem="@layout/fragment_bsbookitem" />

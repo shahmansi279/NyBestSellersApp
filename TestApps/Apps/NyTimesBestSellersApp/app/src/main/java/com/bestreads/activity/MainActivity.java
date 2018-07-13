@@ -59,8 +59,12 @@ public class MainActivity extends AppCompatActivity implements  BSListItemFragme
 
             setActionBarTitle(titles[position]);
             Fragment fragment = ((BSFragmentPagerAdapter) viewPager.getAdapter()).getFragment(position);
-            fragment.onResume();
-            adapter.notifyDataSetChanged();
+
+            if(fragment != null){
+                fragment.onResume();
+                adapter.notifyDataSetChanged();
+            }
+
         }
 
         @Override

@@ -10,6 +10,7 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bestreads.NyBsClient;
 import com.bestreads.PaginationScrollListener;
@@ -50,14 +51,14 @@ public class BSHistoryItemFragment extends Fragment {
     private List<BSHistoryList.BSHistoryBookItem> bsHistoryListItems;
     private boolean isLoading = false;
     private int offset = 20;
-    private int TOTAL_PAGES = 0;
+    private int totalPages = 0;
     private int currentPage = 0;
     private boolean isLastPage = false;
     private SearchView searchView;
     private int searchCount = 0;
     private boolean isSearch = false;
     private String searchQuery = null;
-    private int numResults = 0;
+    private TextView noDataView;
 
 
     //private int
@@ -98,17 +99,20 @@ public class BSHistoryItemFragment extends Fragment {
         recyclerView =(RecyclerView) view.findViewById(R.id.list);
         searchView = (SearchView)view.findViewById(R.id.search);
 
+        noDataView = (TextView)view.findViewById(R.id.no_search_results);
 
         DividerItemDecoration itemDecor = new DividerItemDecoration(getActivity().getApplicationContext(), DividerItemDecoration.VERTICAL);
         itemDecor.setDrawable(getResources().getDrawable(R.drawable.divider));
         recyclerView.addItemDecoration(itemDecor);
 
 
-        //Fetch first 20 items.
+
         bsClient =  BSApiClient.getClient().create(BSInterface.class);
         historyAdapter = new MyBSHistoryItemRecyclerViewAdapter(mListener);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
-        loadFirstPage();
+
+        bsHistoryListItems = new LinkedList<BSHistoryList.BSHistoryBookItem>();
 
         recyclerView.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
 
@@ -116,15 +120,17 @@ public class BSHistoryItemFragment extends Fragment {
             protected void loadMoreItems() {
 
                 isLoading = true;
-                currentPage += 1;
 
-                if(currentPage == TOTAL_PAGES)
-                    isLastPage = true;
+                if(!isSearch){
 
-                if(!isSearch)
-                    fetchMoreItems();
-                else
-                   fetchMoreSearchItems();
+                    currentPage += 1;
+                    if(currentPage == totalPages - 1)
+                        isLastPage = true;
+
+                    fetchResults(currentPage);
+                }
+
+                isLoading = false;
             }
 
             @Override
@@ -135,7 +141,6 @@ public class BSHistoryItemFragment extends Fragment {
             @Override
             public boolean isLastPage() {
                 return isLastPage;
-
             }
 
             @Override
@@ -143,6 +148,8 @@ public class BSHistoryItemFragment extends Fragment {
                 return isLoading;
             }
         });
+
+
 
         // Add Search View to the fragment
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -163,7 +170,6 @@ public class BSHistoryItemFragment extends Fragment {
             }
         });
 
-        recyclerView.clearOnScrollListeners();
 
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -171,14 +177,17 @@ public class BSHistoryItemFragment extends Fragment {
 
                 recyclerView.setAdapter(null);
                 historyAdapter.clear();
-                loadFirstPage();
+                noDataView.setVisibility(View.GONE);
+                currentPage = 0;
+                fetchResults(currentPage);
                 isSearch = false;
                 return false;
             }
         });
 
 
-
+        //Fetch first 20 items.
+        fetchResults(currentPage);
         return view;
     }
     // This method perfroms the search based on Query Text submitted
@@ -187,26 +196,31 @@ public class BSHistoryItemFragment extends Fragment {
 
         searchCount = 0;
         isSearch = true;
-        bsHistoryListItems = new LinkedList<BSHistoryList.BSHistoryBookItem>();
         recyclerView.setAdapter(null);
         historyAdapter.clear();
+        currentPage = 0;
+        fetchSearchResults();
 
+    }
+
+
+    private void fetchSearchResults(){
 
         Observable.just(bsClient).subscribeOn(Schedulers.computation())
                 .flatMap(s -> {
                     Observable<BSHistoryList> authorObservable
-                            = s.getBSHistoryByAuthor(NyBsClient.getBSIdentifier(), searchQuery, 0).subscribeOn(Schedulers.io());
+                            = ( Observable<BSHistoryList>)s.getBSHistoryByAuthor(NyBsClient.getBSIdentifier(), searchQuery, 0).subscribeOn(Schedulers.io());
 
                     Observable<BSHistoryList> titleObservable
                             = s.getBSHistoryByTitle(NyBsClient.getBSIdentifier(), searchQuery,0).subscribeOn(Schedulers.io());
 
-                    return authorObservable.merge(authorObservable, titleObservable);
+
+                    return authorObservable.mergeWith(titleObservable);
 
 
                 }).observeOn(AndroidSchedulers.mainThread()).subscribe(this::loadSearchResults,this::handleError);
 
     }
-
 
     private void loadSearchResults(BSHistoryList list){
 
@@ -216,11 +230,20 @@ public class BSHistoryItemFragment extends Fragment {
             searchCount ++;
         }
 
+        //second time = title observable results are returned
         if(searchCount == 2)
         {
-            historyAdapter.addAll(bsHistoryListItems);
-            recyclerView.setAdapter(historyAdapter);
+            if(bsHistoryListItems.size() > 0)
+            {
+                historyAdapter.addAll(bsHistoryListItems);
+                recyclerView.setAdapter(historyAdapter);
+                noDataView.setVisibility(View.GONE);
+            }else
+            {
+                noDataView.setVisibility(View.VISIBLE);
+            }
 
+            searchCount = 0;
         }
 
     }
@@ -230,29 +253,7 @@ public class BSHistoryItemFragment extends Fragment {
         t.printStackTrace();
 
     }
-    private void loadFirstPage(){
-
-        Call<BSHistoryList> call = bsClient.getBSHistory(NyBsClient.getBSIdentifier(),0);
-
-        call.enqueue(new Callback<BSHistoryList>() {
-            @Override
-            public void onResponse(Call<BSHistoryList> call, Response<BSHistoryList> response) {
-
-                List<BSHistoryList.BSHistoryBookItem> books = response.body().getResults();
-                isLoading = false;
-                historyAdapter.addAll(books);
-                recyclerView.setAdapter(historyAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<BSHistoryList> call, Throwable t) {
-                call.cancel();
-            }
-
-        });
-    }
-
-    private void fetchMoreItems() {
+    private void fetchResults(int currentPage){
 
         Call<BSHistoryList> call = bsClient.getBSHistory(NyBsClient.getBSIdentifier(),currentPage * offset);
 
@@ -261,7 +262,10 @@ public class BSHistoryItemFragment extends Fragment {
             public void onResponse(Call<BSHistoryList> call, Response<BSHistoryList> response) {
 
                 List<BSHistoryList.BSHistoryBookItem> books = response.body().getResults();
-                isLoading = false;
+
+                if(currentPage == 0)
+                    totalPages = response.body().getNumResults()/ offset + 1;
+
                 historyAdapter.addAll(books);
                 recyclerView.setAdapter(historyAdapter);
             }
@@ -272,28 +276,12 @@ public class BSHistoryItemFragment extends Fragment {
             }
 
         });
-
-    }
-
-    private void fetchMoreSearchItems(){
-
-        Observable.just(bsClient).subscribeOn(Schedulers.computation())
-                .flatMap(s -> {
-                    Observable<BSHistoryList> authorObservable
-                            = s.getBSHistoryByAuthor(NyBsClient.getBSIdentifier(), searchQuery, currentPage * offset).subscribeOn(Schedulers.io());
-
-                    Observable<BSHistoryList> titleObservable
-                            = s.getBSHistoryByTitle(NyBsClient.getBSIdentifier(), searchQuery,currentPage * offset).subscribeOn(Schedulers.io());
-
-                    return Observable.concat(authorObservable,titleObservable);
-                }).observeOn(AndroidSchedulers.mainThread()).subscribe(this::loadSearchResults  ,this::handleError);
     }
 
     @Override
     public void onResume() {
         super.onResume();
     }
-
 
     @Override
     public void onAttach(Context context) {

@@ -98,9 +98,10 @@ public class BSBookItemFragment extends Fragment {
                 @Override
                 public void onResponse(Call<BSBookList> call, Response<BSBookList> response) {
 
-                        bsBookItems = response.body().getResults();
-                        bookItemAdapter = new MyBSBookItemRecyclerViewAdapter(bsBookItems , mListener);
-                        recyclerView.setAdapter(bookItemAdapter);
+                    bsBookItems = response.body().getResults();
+                    bookItemAdapter = new MyBSBookItemRecyclerViewAdapter( mListener);
+                    bookItemAdapter.addAll(bsBookItems);
+                    recyclerView.setAdapter(bookItemAdapter);
 
                 }
 

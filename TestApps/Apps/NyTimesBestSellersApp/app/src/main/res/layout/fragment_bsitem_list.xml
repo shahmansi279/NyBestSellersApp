@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
-    android:tag="@+id/favorites"
+    android:tag="bestsellinglistitems"
     android:name="com.bestreads.fragment.BSItemFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

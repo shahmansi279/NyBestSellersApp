@@ -16,6 +16,7 @@ import com.bestreads.rest.GBApiClient;
 import com.bestreads.rest.GBInterface;
 import com.bestreads.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,8 +34,8 @@ public class MyBSBookItemRecyclerViewAdapter extends RecyclerView.Adapter<MyBSBo
     private final OnListFragmentInteractionListener mListener;
     private List<Item> gbBookItems = null;
 
-    public MyBSBookItemRecyclerViewAdapter(List<BSBookList.BSBookItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
+    public MyBSBookItemRecyclerViewAdapter(OnListFragmentInteractionListener listener) {
+        mValues = new ArrayList<>();
         mListener = listener;
     }
 
@@ -107,6 +108,12 @@ public class MyBSBookItemRecyclerViewAdapter extends RecyclerView.Adapter<MyBSBo
     @Override
     public int getItemCount() {
         return mValues.size();
+    }
+
+    public void addAll(List<BSBookList.BSBookItem> bsBookItems) {
+
+        mValues.addAll(bsBookItems);
+
     }
 
     public void clear() {

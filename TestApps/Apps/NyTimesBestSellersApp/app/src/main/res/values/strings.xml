@@ -15,6 +15,7 @@
     <string name="total_pages">Total Pages</string>
     <string name="currency_code_usd">$</string>
     <string name="by">By</string>
+    <string name="no_search_results">Could not find any results matching searching criteria</string>
     <string name="google_preview">Google Preview</string>
     <string name="average_rating">Rating</string>
     <string name="search">Search By Title or Author</string>
