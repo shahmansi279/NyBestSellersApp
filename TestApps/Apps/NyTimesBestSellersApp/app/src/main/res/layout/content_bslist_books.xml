@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id ="@+id/booksList"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.bestreads.activity.BSListBooksActivity"
+    tools:context="project.com.nybestsellerbooksapp.activity.BSListBooksActivity"
     tools:showIn="@layout/activity_bslist_books">
 
 

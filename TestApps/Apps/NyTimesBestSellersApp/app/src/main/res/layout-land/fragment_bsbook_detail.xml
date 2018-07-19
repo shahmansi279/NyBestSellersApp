@@ -7,7 +7,7 @@
     android:paddingTop="?android:attr/actionBarSize"
     android:visibility="visible"
     android:background="@color/colorBackground"
-    tools:context="com.bestreads.fragment.BSBookDetailFragment"
+    tools:context="project.com.nybestsellerbooksapp.fragment.BSBookDetailFragment"
    >
 
     <android.support.v4.widget.NestedScrollView

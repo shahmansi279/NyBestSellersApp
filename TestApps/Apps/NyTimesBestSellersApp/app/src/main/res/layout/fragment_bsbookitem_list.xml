@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
     android:tag="@+id/bestsellinglists"
-    android:name="com.bestreads.fragment.BSBookItemFragment"
+    android:name="project.com.nybestsellerbooksapp.fragment.BSBookItemFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:nestedScrollingEnabled="false"
-    tools:context="com.bestreads.fragment.BSBookItemFragment"
+    tools:context="project.com.nybestsellerbooksapp.fragment.BSBookItemFragment"
     tools:listitem="@layout/fragment_bsbookitem" />

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingTop="?android:attr/actionBarSize"
     android:visibility="visible"
-    tools:context="com.bestreads.fragment.BSBookDetailFragment"
+    tools:context="project.com.nybestsellerbooksapp.fragment.BSBookDetailFragment"
     tools:layout_editor_absoluteY="25dp"
     android:background="@color/colorBackground">
 
